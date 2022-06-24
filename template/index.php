@@ -5,7 +5,7 @@
 $route = [
     '\s*' => 'App/default', // default
     'app/hello' => 'App/hello', // example: index.php/app/hello/Emily
-    'app/hiii' => 'App/hi', // example: index.php/app/hi?name=Alice
+    'app/hi' => 'App/hi', // example: index.php/app/hi?name=Alice
     '.*' => 'App/empty', // 404
 ];
 
