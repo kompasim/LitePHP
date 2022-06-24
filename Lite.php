@@ -37,63 +37,44 @@ class Lite
         $this->execute($describe);
     }
 
-    // execute controller
+    function parse($path)
+    {
+        // router
+        foreach (ROUTES_MAP as $route => $describe)
+        {
+            assertOrExit(preg_match("/^.+$/i", $route), "invaid route key!");
+            assertOrExit(preg_match("/^(\w+)(\/\w+)$/i", $describe), "invaid route value!");
+            $pattern = "/^" . str_replace('/', '\/', $route) . "(\/\w+)*$/i";
+            if (preg_match($pattern, $path)) return $describe . preg_replace("/^(\w+)(\/\w+)?/i", "", $path);
+        }
+        // match
+        if (preg_match_all("/^(\w+)\/(\w+)/i", $path, $result)) {
+            if (count($result) == 3) return $path;
+        }
+        // invalid
+        return NULL;
+    }
+
     function execute($describe)
     {
         // check parameters
         $args = explode('/', $describe);
-        count($args) >= 2 or exit("system error!");
+        assertOrExit(count($args) >= 2, 'system error!');
         $class = $args[0];
         $method = $args[1];
         define("CURRENT_APPLICATION", $class);
         define("CURRENT_FUNCTION", $method);
         $params = array_slice($args, 2, count($args) - 2);
-        // check file
         $file = PATH_APP . $class . '.php';
-        if (!file_exists($file)) {
-            $this->redirect(ROUTE_EMPTY);
-        }
+        // require file
+        assertOrExit(file_exists($file), 'file not found:' . $file);
         require_once $file;
-        // check class
-        if (!class_exists($class, false)) {
-            $this->redirect(ROUTE_EMPTY);
-        }
+        // instantiate class
+        assertOrExit(class_exists($class, false), 'class not found:' . $class);
         $object = new $class($this);
-        // check method
-        if (!method_exists($object, $method)) {
-            assertOrExit($describe != ROUTE_EMPTY, "empty route not set");
-            $this->redirect(ROUTE_EMPTY);
-        }
-        // call
+        // call method
+        assertOrExit(method_exists($object, $method), 'method not found:' . $method);
         call_user_func_array(array($object, $method), $params);
-    }
-
-    // parser route
-    function parse($path)
-    {
-        // default
-        if (preg_match("/^\s*$/", $path)) return ROUTE_DEFAULT;
-        // router
-        foreach (ROUTES_MAP as $route => $describe)
-        {
-            $patternMatch = "/^" . str_replace('/', '\/', $route) . "(\/[a-zA-Z0-9]+)*$/i";
-            assertOrExit(preg_match(PATTERN_ROUTEE_CHECK, $describe), "invaid route config value!");
-            assertOrExit(preg_match(PATTERN_ROUTEE_CHECK, $route), "invaid route config key!");
-            if (preg_match($patternMatch, $path)) {
-                return $describe . preg_replace(PATTERN_ROUTEE_REPLACE, "", $path);
-            }
-        }
-        // match
-        if (preg_match_all(PATTERN_ROUTEE_REPLACE, $path, $result)) {
-            if (count($result) == 3) return $path;
-        }
-        // empty
-        return ROUTE_EMPTY;
-    }
-
-    function redirect($describe)
-    {
-        redirectAndExit($_SERVER['SCRIPT_NAME'] . "/" . $describe);
     }
 
 }
