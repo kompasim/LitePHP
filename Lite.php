@@ -27,15 +27,11 @@ class Lite
 
     function run()
     {
-        //
-        $this->config = null;
         // filter
-        $info = explode("&", $_SERVER['QUERY_STRING'])[0];
-        $info = trim(trim($info, "/"), "?");
+        $path = trim($_SERVER['PATH_INFO'], "/");
+        assertOrExit(is_string($path), "path error!");
         // parse
-        $describe = $this->parse($info);
-        $describe = trim(trim($describe, "/"), "?");
-        // check
+        $describe = trim(trim($this->parse($path), "/"), "?");
         assertOrExit(isValidString($describe), "route error!");
         // excecute
         $this->execute($describe);
