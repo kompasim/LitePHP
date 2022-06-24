@@ -2,8 +2,10 @@
 
 // namespace LitePHP;
 
-defined('PATH_APP') or exit('denied!');
-defined('PATH_LITE') or exit('denied!');
+define('PATH_APP', dirname(debug_backtrace()[0]['file']) . "/");
+define('PATH_LITE', __DIR__ . "/");
+if (!defined('IS_DEBUG')) define('IS_DEBUG', true);
+
 include(PATH_LITE . "other/lconstants.php");
 include(PATH_LITE . "other/lsecret.php");
 include(PATH_LITE . "other/lgrammar.php");
@@ -51,7 +53,7 @@ class Lite
         define("CURRENT_FUNCTION", $method);
         $params = array_slice($args, 2, count($args) - 2);
         // check file
-        $file = PATH_CONTROLLER . $class . '.php';
+        $file = PATH_APP . $class . '.php';
         if (!file_exists($file)) {
             $this->redirect(ROUTE_EMPTY);
         }
@@ -97,7 +99,5 @@ class Lite
     {
         redirectAndExit($_SERVER['SCRIPT_NAME'] . "/" . $describe);
     }
-    
-    
 
 }

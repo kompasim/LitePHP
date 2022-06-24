@@ -40,7 +40,7 @@ function getStringSession($text)
     return md5($text . md5(time()));
 }
 
-function getStringSecret($text)
+function getStringSecret($text, $secret = "")
 {
-    return md5($text . md5(SECRET_STRING));
+    return md5($text . md5($secret));
 }

@@ -36,10 +36,10 @@ class LApplication
     }
 
 
-    function initDatabase()
+    function initDatabase($medooInfo)
     {
         $this->database = new LDatabase();
-        $this->database->connect();
+        $this->database->connect($medooInfo);
         $this->database;
     }
 

@@ -1,16 +1,19 @@
 <?php
 
 defined('PATH_LITE') or exit('denied!');
+define('MEDOO_INFO', [
+    'database_type' => 'sqlite',
+    'database_file' => ':memory:'
+]);
 
 class App extends LApplication {
-
 
     function __construct()
     {
         parent::__construct();
-        // $this->initCookie();
-        // $this->initSession();
-        // $this->initDatabase();
+        $this->initCookie();
+        $this->initSession();
+        $this->initDatabase(MEDOO_INFO);
     }
 
     function default()

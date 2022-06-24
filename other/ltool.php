@@ -102,12 +102,12 @@ function downloadAndSave($url, $path)
 
 function setLiteLocked()
 {
-    file_put_contents(PATH_LITE_LOCK, getDateString());
+    file_put_contents(PATH_LOCK, getDateString());
 }
 
 function isLiteLocked()
 {
-    return is_file(PATH_LITE_LOCK);
+    return is_file(PATH_LOCK);
 }
 
 function checkLiteLocked()
