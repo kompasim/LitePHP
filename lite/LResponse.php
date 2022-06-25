@@ -17,26 +17,28 @@ class LResponse
 
     function writeRedirect($path)
     {
-        assertStringExit($path);
-        redirectAndExit($_SERVER['SCRIPT_NAME'] . "/" . $path);
+        assert_valid_string($path);
+        $url = $_SERVER['SCRIPT_NAME'] . "/" . $path;
+        echo "<script>window.location.href='" . $url . "';</script>";
+        exit;
     }
 
     function writeHead($content)
     {
-        assertStringExit($content);
+        assert_valid_string($content);
         header($content);
     }
 
     function writeText($text)
     {
-        assertStringExit($text);
+        assert_valid_string($text);
         echo $text;
     }
 
     function writePhp($name, $data = [])
     {
         $path = PATH_APP . $name . ".php";
-        assertFileExit($path);
+        assert_valid_file($path);
         foreach ($data as $key => $value) {
             $$key = $value;
         }
@@ -45,13 +47,13 @@ class LResponse
 
     function writeFile($path)
     {
-        assertFileExit($path);
+        assert_valid_file($path);
         echo file_get_contents($path);
     }
 
     function writeJson($array)
     {
-        assertArrayExit($array);
+        assert_valid_array($array);
         echo json_encode($array);
     }
 

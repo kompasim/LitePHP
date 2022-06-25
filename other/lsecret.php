@@ -44,3 +44,18 @@ function getStringSecret($text, $secret = "")
 {
     return md5($text . md5($secret));
 }
+
+function setLiteLocked()
+{
+    file_put_contents(PATH_APP . "lite.lock", date("Y-m-d_H-i-s"));
+}
+
+function isLiteLocked()
+{
+    return is_file(PATH_APP . "lite.lock");
+}
+
+function checkLiteLocked()
+{
+    isLiteLocked() or exit("lite not installed");
+}

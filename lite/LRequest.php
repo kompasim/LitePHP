@@ -76,33 +76,33 @@ class LRequest
         $resultInfo['isOk'] = true;
         $resultInfo['errMsg'] = "";
         try {
-            assertOrThrow(isset($_FILES[$key]), "file key not found");
-            assertOrThrow(isValidString($args['type']), "file type not set");
-            assertOrThrow(isValidNumber($args['size']), "file size not set");
-            assertOrThrow(isValidString($args['path']), "file path not set");
+            assert_or_throw(isset($_FILES[$key]), "file key not found");
+            assert_or_throw(is_valid_string($args['type']), "file type not set");
+            assert_or_throw(is_valid_number($args['size']), "file size not set");
+            assert_or_throw(is_valid_string($args['path']), "file path not set");
             $file = $_FILES[$key];
             $type = $args['type'];
             $size = $args['size'];
             $path = $args['path'];
-            assertOrThrow($file["error"] == 0, "file status error:" . $file["error"]); // 0:no error, 4:not selected
-            assertOrThrow(file_exists($file["tmp_name"]), "file not exist");
-            assertOrThrow(strpos($path, PATH_APP) === 0, "file path error");
+            assert_or_throw($file["error"] == 0, "file status error:" . $file["error"]); // 0:no error, 4:not selected
+            assert_or_throw(file_exists($file["tmp_name"]), "file not exist");
+            assert_or_throw(strpos($path, PATH_APP) === 0, "file path error");
             $name = md5_file($file["tmp_name"]) . ".upload";
-            assertOrThrow(strpos($type, $file["type"]) !== false, "file type error");
-            assertOrThrow($file["size"] < $size, "file size error:" . $file["size"] . "<" . $size);
+            assert_or_throw(strpos($type, $file["type"]) !== false, "file type error");
+            assert_or_throw($file["size"] < $size, "file size error:" . $file["size"] . "<" . $size);
             $ext = pathinfo($file["name"])['extension'];
-            assertOrThrow(isValidString($ext), "file extension error");
+            assert_or_throw(is_valid_string($ext), "file extension error");
             $fileName = $name . "." . $ext;
             $filePath = $path . $fileName;
-            assertOrThrow(!file_exists($filePath), "file already exist:" . $filePath);
-            createNewDir($path, true);
+            assert_or_throw(!file_exists($filePath), "file already exist:" . $filePath);
+            tools_create_dir($path, true);
             move_uploaded_file($file["tmp_name"], $filePath);
-            assertOrThrow(file_exists($filePath), "file move failed");
+            assert_or_throw(file_exists($filePath), "file move failed");
             $resultInfo['fileExt'] = $ext;
             $resultInfo['fileName'] = $name;
             $resultInfo['filePath'] = $filePath;
         } catch (Exception $exception) {
-            deleteSomethingSafely(isset($_FILES[$key]) ? $_FILES[$key]["tmp_name"] : "");
+            tools_delete_dir(isset($_FILES[$key]) ? $_FILES[$key]["tmp_name"] : "");
             $resultInfo['isOk'] = false;
             $resultInfo['errMsg'] = $exception->getMessage();
         }

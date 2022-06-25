@@ -7,8 +7,7 @@ define('PATH_LITE', __DIR__ . "/");
 if (!defined('IS_DEBUG')) define('IS_DEBUG', true);
 
 include(PATH_LITE . "other/lsecret.php");
-include(PATH_LITE . "other/lgrammar.php");
-include(PATH_LITE . "other/ltool.php");
+include(PATH_LITE . "other/ltools.php");
 include(PATH_LITE . "lite/LApplication.php");
 
 class Lite
@@ -27,11 +26,11 @@ class Lite
 
     function route($rule, $argument)
     {
-        assertOrExit(preg_match("/^.+$/i", $rule), "invaid route rule!");
+        assert_or_exit(preg_match("/^.+$/i", $rule), "invaid route rule!");
         if (is_string($argument)) {
-            assertOrExit(preg_match("/^(\w+)(\/\w+)$/i", $argument), "invaid route describe!");
+            assert_or_exit(preg_match("/^(\w+)(\/\w+)$/i", $argument), "invaid route describe!");
         } else {
-            assertOrExit(is_callable($argument), "invalid route argument!");
+            assert_or_exit(is_callable($argument), "invalid route argument!");
         }
         $route = array($rule, $argument);
         array_push($this->routes, $route);
@@ -42,7 +41,7 @@ class Lite
         if(is_callable($handler)) $this->handler = $handler;
         // filter
         $path = trim(trim($_SERVER['PATH_INFO'], "/"), "?");
-        assertOrExit(is_string($path), "path error!");
+        assert_or_exit(is_string($path), "path error!");
         // parse
         $func = NULL;
         $desc = NULL;
@@ -68,7 +67,7 @@ class Lite
     private function explode($desc)
     {
         $args = explode('/', $desc);
-        assertOrExit(count($args) >= 2, 'system error!');
+        assert_or_exit(count($args) >= 2, 'system error!');
         $class = $args[0];
         $method = $args[1];
         define("CURRENT_APPLICATION", $class);
@@ -108,11 +107,11 @@ class Lite
         $method = $box[1];
         $params  = $box[2];
         $file = PATH_APP . $class . '.php';
-        assertOrExit(file_exists($file), 'file not found:' . $file);
+        assert_or_exit(file_exists($file), 'file not found:' . $file);
         require_once $file;
-        assertOrExit(class_exists($class, false), 'class not found:' . $class);
+        assert_or_exit(class_exists($class, false), 'class not found:' . $class);
         $object = new $class($this);
-        assertOrExit(method_exists($object, $method), 'method not found:' . $method);
+        assert_or_exit(method_exists($object, $method), 'method not found:' . $method);
         call_user_func_array(array($object, $method), $params);
         return $object;
     }
