@@ -4,16 +4,20 @@ defined('PATH_LITE') or exit('denied!');
 
 class App extends LApplication {
 
-    function __construct()
+    function onCreate()
     {
-        parent::__construct();
-        $this->initCookie();
-        $this->initSession();
-        $this->initdatabase();
+        // 
+        // $this->lite
+        // $this->request
+        // $this->response
+        // $this->$cookie
+        // $this->$session
+        // 
         // $medoo = tools_mew_class('./Medoo.php', '\Medoo\Medoo', [
         //     'database_type' => 'sqlite',
         //     'database_file' => ':memory:'
         // ]);
+        // 
     }
 
     function default()

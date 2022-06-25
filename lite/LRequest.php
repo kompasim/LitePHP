@@ -5,26 +5,6 @@ defined('PATH_LITE') or exit('denied!');
 class LRequest
 {
 
-    function __construct()
-    {
-       //
-    }
-
-    function __destruct()
-    {
-        //
-    }
-
-    function getApplication()
-    {
-        return defined("CURRENT_APPLICATION") ? CURRENT_APPLICATION : NULL;
-    }
-
-    function getFunction()
-    {
-        return defined("CURRENT_FUNCTION") ? CURRENT_FUNCTION : NULL;
-    }
-
     function readHead($key, $default)
     {
         $headers = getallheaders();

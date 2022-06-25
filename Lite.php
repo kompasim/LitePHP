@@ -73,6 +73,7 @@ class Lite
         $params = array_slice($args, 2, count($args) - 2);
         define("CURRENT_APPLICATION", $class);
         define("CURRENT_FUNCTION", $method);
+        define("CURRENT_PARAMS", $params);
         return array($class, $method, $params);
     }
 

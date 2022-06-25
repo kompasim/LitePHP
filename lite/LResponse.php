@@ -5,16 +5,6 @@ defined('PATH_LITE') or exit('denied!');
 class LResponse
 {
 
-    function __construct()
-    {
-       //
-    }
-
-    function __destruct()
-    {
-        //
-    }
-
     function writeRedirect($url, $code = 303)
     {
         assert_valid_string($url);
@@ -55,6 +45,13 @@ class LResponse
         assert_valid_array($array);
         header('Content-type: application/json');
         echo json_encode($array);
+    }
+    
+    function writeXml($array)
+    {
+        assert_valid_array($array);
+        header('Content-type: text/xml');
+        echo tools_xml_encode($array);
     }
     
     function writeFile($path)

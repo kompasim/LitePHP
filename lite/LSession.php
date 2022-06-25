@@ -5,19 +5,9 @@ defined('PATH_LITE') or exit('denied!');
 class LSession
 {
 
-    function __construct()
-    {
-        //
-    }
-
-    function __destruct()
-    {
-        //
-    }
-
     function start()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
     }
 
     
@@ -48,7 +38,7 @@ class LSession
 
     function destroy()
     {
-        session_destroy();
+        if (session_status() === PHP_SESSION_ACTIVE) session_destroy();
     }
 
 }

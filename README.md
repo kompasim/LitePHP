@@ -22,3 +22,5 @@ include_once("../Lite.php");
 * [Medoo](https://github.com/catfan/Medoo)
 * [Image](https://github.com/claviska/SimpleImage)
 * [Http](https://github.com/summerblue/http-class-for-php)
+* [QRCode](https://sourceforge.net/projects/phpqrcode/)
+* [Captcha](https://github.com/lifei6671/php-captcha)

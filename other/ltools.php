@@ -158,3 +158,27 @@ function tools_mew_class()
     assert_or_exit(class_exists($class, false), 'class not found!');
     return new $class(...$params);
 }
+
+function tools_xml_encode(array $arrayData, $xmlElement = "<root/>", string $keyPrefix = "key_")
+{
+    if (is_string($xmlElement)) $xmlElement = new SimpleXMLElement($xmlElement);
+    assert_or_throw($xmlElement instanceof SimpleXMLElement, 'ihvalid root node!');
+    foreach ($arrayData as $key => $value) {
+        if (gettype($key) == 'integer') $key = $keyPrefix . "$key";
+        if (is_array($value)) {
+            $node = $xmlElement->addChild($key);
+            tools_xml_encode($value, $node, $keyPrefix);
+        } else {
+            $xmlElement->addChild($key, $value);
+        }
+    }
+    return $xmlElement->asXML();
+}
+
+function tools_xml_decode(string $xmlString)
+{
+    $xmlData = simplexml_load_string($xmlString);
+    $jsonString = json_encode($xmlData);
+    $arrayData = json_decode($jsonString, TRUE);
+    return $arrayData;
+}

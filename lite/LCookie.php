@@ -5,21 +5,10 @@ defined('PATH_LITE') or exit('denied!');
 class LCookie
 {
 
-    function __construct()
-    {
-       //
-    }
-
-    function __destruct()
-    {
-        //
-    }
-
     function start()
     {
         //
     }
-
     
     function get($key, $default)
     {
