@@ -5,7 +5,6 @@ require_once PATH_LITE . "lite/LRequest.php";
 require_once PATH_LITE . "lite/LResponse.php";
 require_once PATH_LITE . "lite/LCookie.php";
 require_once PATH_LITE . "lite/LSession.php";
-require_once PATH_LITE . "lite/LDatabase.php";
 
 class LApplication
 {
@@ -35,29 +34,16 @@ class LApplication
         $this->session;
     }
 
-
-    function initDatabase($medooInfo)
-    {
-        $this->database = new LDatabase();
-        $this->database->connect($medooInfo);
-        $this->database;
-    }
-
-    function newImage()
+    function loadThrid()
     {
         try {
-			require_once PATH_LITE . "third/Image.php";
-			return new \claviska\SimpleImage();
-		} catch(Exception $err) {
-			return NULL;
-		}
-    }
-
-    function newHttp()
-    {
-        try {
-			require_once PATH_LITE . "third/Http.php";
-			return new Http();
+            assert_or_exit(func_num_args() >= 2);
+            $arguments = func_get_args();
+            $path = $arguments[0];
+            $class = $arguments[1];
+            $params = array_slice($arguments, 2, count($arguments) - 2);
+			require_once PATH_LITE . "third/" . $path;
+			return new $class(...$params);
 		} catch(Exception $err) {
 			return NULL;
 		} 

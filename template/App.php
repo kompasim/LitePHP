@@ -1,10 +1,6 @@
 <?php
 
 defined('PATH_LITE') or exit('denied!');
-define('MEDOO_INFO', [
-    'database_type' => 'sqlite',
-    'database_file' => ':memory:'
-]);
 
 class App extends LApplication {
 
@@ -13,7 +9,12 @@ class App extends LApplication {
         parent::__construct();
         $this->initCookie();
         $this->initSession();
-        $this->initDatabase(MEDOO_INFO);
+        // $image = $app->loadThrid('./Image.php', '\claviska\SimpleImage');
+        // $http = $app->loadThrid('./Http.php', 'Http');
+        // $medoo = $app->loadThrid('./Medoo.php', '\Medoo\Medoo', [
+        //     'database_type' => 'sqlite',
+        //     'database_file' => ':memory:'
+        // ]);
     }
 
     function default()
