@@ -71,10 +71,13 @@ class LResponse
     {
         $path = PATH_APP . $path;
         assert_valid_file($path);
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $ftype = finfo_file($finfo, $path);
+        finfo_close($finfo);
         if (!is_valid_string($name)) $name = basename($path);
         header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
         header("Cache-Control: public"); // needed for internet explorer
-        header("Content-Type: application/zip");
+        header("Content-Type: " . $ftype);
         header("Content-Transfer-Encoding: Binary");
         header("Content-Length:".filesize($path));
         header("Content-Disposition: attachment; filename=" . $name);

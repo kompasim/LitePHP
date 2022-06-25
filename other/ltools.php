@@ -147,18 +147,6 @@ function tools_get_script($isFull = false)
     return str_replace("index.php", "", strtolower($_SERVER['SERVER_ADDR'] . $_SERVER['SCRIPT_NAME']));
 }
 
-function tools_mew_class()
-{
-    assert_or_exit(func_num_args() >= 2, 'too few arguments');
-    $arguments = func_get_args();
-    $path = $arguments[0];
-    $class = $arguments[1];
-    $params = array_slice($arguments, 2, count($arguments) - 2);
-    require_once $path;
-    assert_or_exit(class_exists($class, false), 'class not found!');
-    return new $class(...$params);
-}
-
 function tools_xml_encode(array $arrayData, $xmlElement = "<root/>", string $keyPrefix = "key_")
 {
     if (is_string($xmlElement)) $xmlElement = new SimpleXMLElement($xmlElement);

@@ -13,11 +13,6 @@ class App extends LApplication {
         // $this->$cookie
         // $this->$session
         // 
-        // $medoo = tools_mew_class('./Medoo.php', '\Medoo\Medoo', [
-        //     'database_type' => 'sqlite',
-        //     'database_file' => ':memory:'
-        // ]);
-        // 
     }
 
     function default()
