@@ -6,16 +6,19 @@
 
 * usage
 
+> handle url `index.php/class/method/argument1/argument2`
+
 ```php
-
-// index.php/class/method/argument1/argument2
-
 include_once("../Lite.php");
 (new Lite())->run(function($app, $class, $method, $arguments) {
     echo 'hello...';
 });
-
 ```
+
 * more
 
 > for more information check the files in `lite` folder ...
+
+* [Medoo](https://github.com/catfan/Medoo)
+* [Image](https://github.com/claviska/SimpleImage)
+* [Http](https://github.com/summerblue/http-class-for-php)

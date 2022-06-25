@@ -9,9 +9,7 @@ class App extends LApplication {
         parent::__construct();
         $this->initCookie();
         $this->initSession();
-        // $image = $app->loadThrid('./Image.php', '\claviska\SimpleImage');
-        // $http = $app->loadThrid('./Http.php', 'Http');
-        // $medoo = $app->loadThrid('./Medoo.php', '\Medoo\Medoo', [
+        // $medoo = tools_mew_class('./Medoo.php', '\Medoo\Medoo', [
         //     'database_type' => 'sqlite',
         //     'database_file' => ':memory:'
         // ]);
