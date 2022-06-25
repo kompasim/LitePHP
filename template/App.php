@@ -9,6 +9,7 @@ class App extends LApplication {
         parent::__construct();
         $this->initCookie();
         $this->initSession();
+        $this->initdatabase();
         // $medoo = tools_mew_class('./Medoo.php', '\Medoo\Medoo', [
         //     'database_type' => 'sqlite',
         //     'database_file' => ':memory:'

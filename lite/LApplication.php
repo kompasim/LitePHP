@@ -5,6 +5,7 @@ require_once PATH_LITE . "lite/LRequest.php";
 require_once PATH_LITE . "lite/LResponse.php";
 require_once PATH_LITE . "lite/LCookie.php";
 require_once PATH_LITE . "lite/LSession.php";
+require_once PATH_LITE . "lite/LDatabase.php";
 
 class LApplication
 {
@@ -31,7 +32,14 @@ class LApplication
     {
         $this->session = new LSession();
         $this->session->start();
-        $this->session;
+        return $this->session;
+    }
+
+    function initDatabase()
+    {
+        $this->database = new LDatabase();
+        $this->database->connect(...func_get_args());
+        return $this->database;
     }
 
 }
