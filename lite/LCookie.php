@@ -38,7 +38,7 @@ class LCookie
 
     function type($key)
     {
-        return $this->has($key) ? gettype($_COOKIE[$key]) : null;
+        return $this->has($key) ? gettype($_COOKIE[$key]) : NULL;
     }
 
     function delete($key)

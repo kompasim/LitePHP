@@ -38,7 +38,7 @@ class LSession
 
     function type($key)
     {
-        return $this->has($key) ? gettype($_SESSION[$key]) : null;
+        return $this->has($key) ? gettype($_SESSION[$key]) : NULL;
     }
 
     function delete($key)

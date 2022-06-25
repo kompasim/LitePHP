@@ -49,7 +49,7 @@ class LApplication
 			require_once PATH_LITE . "third/Image.php";
 			return new \claviska\SimpleImage();
 		} catch(Exception $err) {
-			return null;
+			return NULL;
 		}
     }
 
@@ -59,7 +59,7 @@ class LApplication
 			require_once PATH_LITE . "third/Http.php";
 			return new Http();
 		} catch(Exception $err) {
-			return null;
+			return NULL;
 		} 
     }
 

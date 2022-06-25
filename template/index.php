@@ -1,7 +1,5 @@
 <?php
 
-// routes
-
 include_once("../Lite.php");
 $lite = new Lite();
 

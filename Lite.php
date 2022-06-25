@@ -34,9 +34,10 @@ class Lite
         }
         $route = array($rule, $argument);
         array_push($this->routes, $route);
+        return $this;
     }
 
-    function run($handler)
+    function run($handler = NULL)
     {
         if(is_callable($handler)) $this->handler = $handler;
         // filter
@@ -52,27 +53,26 @@ class Lite
         if ($func != NULL) {
             // execute
             $box = $this->explode($path);
-            $this->execute($func, $box);
+            return $this->execute($func, $box);
         } else if ($desc != NULL) {
             // dispatch
             $box = $this->explode($desc);
-            $this->dispatch($box);
+            return $this->dispatch($box);
         } else {
             // handle
             $box = $this->explode($path);
-            $this->handle($class, $method, $params);
+            return $this->handle($box);
         }
     }
 
     private function explode($desc)
     {
         $args = explode('/', $desc);
-        assert_or_exit(count($args) >= 2, 'system error!');
-        $class = $args[0];
-        $method = $args[1];
+        $class = is_valid_string($args[0]) ? $args[0] : NULL;
+        $method = is_valid_string($args[1]) ? $args[1] : NULL;
+        $params = array_slice($args, 2, count($args) - 2);
         define("CURRENT_APPLICATION", $class);
         define("CURRENT_FUNCTION", $method);
-        $params = array_slice($args, 2, count($args) - 2);
         return array($class, $method, $params);
     }
 

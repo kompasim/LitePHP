@@ -5,7 +5,7 @@ defined('PATH_LITE') or exit('denied!');
 class LDatabase
 {
 
-    var $medoo = null;
+    var $medoo = NULL;
 
     function __construct()
     {

@@ -17,12 +17,12 @@ class LRequest
 
     function getApplication()
     {
-        return defined("CURRENT_APPLICATION") ? CURRENT_APPLICATION : null;
+        return defined("CURRENT_APPLICATION") ? CURRENT_APPLICATION : NULL;
     }
 
     function getFunction()
     {
-        return defined("CURRENT_FUNCTION") ? CURRENT_FUNCTION : null;
+        return defined("CURRENT_FUNCTION") ? CURRENT_FUNCTION : NULL;
     }
 
     function readHead($key, $default)
@@ -45,7 +45,7 @@ class LRequest
             if (count($pair) !== 2) {
                 continue;
             }
-            if ($pair[0] == $key && (gettype($pair[1]) == gettype($default) || $default == null)) {
+            if ($pair[0] == $key && (gettype($pair[1]) == gettype($default) || $default == NULL)) {
                 $value = $pair[1];
                 break;
             }
@@ -55,7 +55,7 @@ class LRequest
 
     function readPost($key, $default)
     {
-        if(isset($_POST[$key]) && (gettype($_POST[$key]) == gettype($default) || $default == null))
+        if(isset($_POST[$key]) && (gettype($_POST[$key]) == gettype($default) || $default == NULL))
         {
             return $_POST[$key];
         }
