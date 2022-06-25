@@ -6,7 +6,6 @@ define('PATH_APP', dirname(debug_backtrace()[0]['file']) . "/");
 define('PATH_LITE', __DIR__ . "/");
 if (!defined('IS_DEBUG')) define('IS_DEBUG', true);
 
-include(PATH_LITE . "other/lconstants.php");
 include(PATH_LITE . "other/lsecret.php");
 include(PATH_LITE . "other/lgrammar.php");
 include(PATH_LITE . "other/ltool.php");
@@ -18,7 +17,7 @@ class Lite
     function __construct()
     {
         $this->routes = [];
-        $this->func = NULL;
+        $this->handler = function() {};
     }
 
     function __destruct()
@@ -26,73 +25,106 @@ class Lite
         //
     }
 
-    function run($argument)
+    function route($rule, $argument)
     {
-        if(is_array($argument)) $this->routes = $argument;
-        if(is_callable($argument)) $this->func = $argument;
+        assertOrExit(preg_match("/^.+$/i", $rule), "invaid route rule!");
+        if (is_string($argument)) {
+            assertOrExit(preg_match("/^(\w+)(\/\w+)$/i", $argument), "invaid route describe!");
+        } else {
+            assertOrExit(is_callable($argument), "invalid route argument!");
+        }
+        $route = array($rule, $argument);
+        array_push($this->routes, $route);
+    }
+
+    function run($handler)
+    {
+        if(is_callable($handler)) $this->handler = $handler;
         // filter
-        $path = trim($_SERVER['PATH_INFO'], "/");
+        $path = trim(trim($_SERVER['PATH_INFO'], "/"), "?");
         assertOrExit(is_string($path), "path error!");
         // parse
-        $describe = trim(trim($this->parse($path), "/"), "?");
-        assertOrExit(isValidString($describe), "route error!");
-        // check parameters
-        $args = explode('/', $describe);
+        $func = NULL;
+        $desc = NULL;
+        $route = $this->parse($path);
+        if ($route != NULL && is_callable($route[1])) $func = $route[1];
+        if ($route != NULL && is_string($route[1])) $desc = $route[1];
+        // run
+        if ($func != NULL) {
+            // execute
+            $box = $this->explode($path);
+            $this->execute($func, $box);
+        } else if ($desc != NULL) {
+            // dispatch
+            $box = $this->explode($desc);
+            $this->dispatch($box);
+        } else {
+            // handle
+            $box = $this->explode($path);
+            $this->handle($class, $method, $params);
+        }
+    }
+
+    private function explode($desc)
+    {
+        $args = explode('/', $desc);
         assertOrExit(count($args) >= 2, 'system error!');
         $class = $args[0];
         $method = $args[1];
         define("CURRENT_APPLICATION", $class);
         define("CURRENT_FUNCTION", $method);
         $params = array_slice($args, 2, count($args) - 2);
-        // run
-        if ($this->func != NULL) {
-            // execute
-            $this->execute($class, $method, $params);
-        } else{
-            // dispatch
-            $this->dispatch($class, $method, $params);
-        }
+        return array($class, $method, $params);
     }
 
-    function parse($path)
+    private function parse($path)
     {
-        // router
-        foreach ($this->routes as $route => $describe)
+        $route = NULL;
+        foreach ($this->routes as $index => $value)
         {
-            assertOrExit(preg_match("/^.+$/i", $route), "invaid route key!");
-            assertOrExit(preg_match("/^(\w+)(\/\w+)$/i", $describe), "invaid route value!");
-            $pattern = "/^" . str_replace('/', '\/', $route) . "(\/\w+)*$/i";
-            if (preg_match($pattern, $path)) return $describe . preg_replace("/^(\w+)(\/\w+)?/i", "", $path);
+            $rule = $value[0];
+            $argument = $value[1];
+            $pattern = "/^" . str_replace('/', '\/', $rule) . "(\/\w+)*$/i";
+            if (preg_match($pattern, $path)) $route = $value;
+            if ($route != NULL && is_string($argument)) $route[1] = $argument . preg_replace("/^(\w+)(\/\w+)?/i", "", $path);
+            if ($route != NULL) break;
         }
-        // match
-        if (preg_match_all("/^(\w+)\/(\w+)/i", $path, $result)) {
-            if (count($result) == 3) return $path;
-        }
-        // invalid
-        return NULL;
+        return $route;
     }
 
-    function execute($class, $method, $params)
+    private function execute($func, $box)
     {
-        // instantiate application
+        $class = $box[0];
+        $method = $box[1];
+        $params  = $box[2];
         $app = new LApplication($this);
-        call_user_func_array($this->func, array($app, $class, $method, $params));
+        call_user_func_array($func, array($app, $params));
         return $app;
     }
 
-    function dispatch($class, $method, $params)
+    private function dispatch($box)
     {
-        // require file
+        $class = $box[0];
+        $method = $box[1];
+        $params  = $box[2];
         $file = PATH_APP . $class . '.php';
         assertOrExit(file_exists($file), 'file not found:' . $file);
         require_once $file;
-        // instantiate class
         assertOrExit(class_exists($class, false), 'class not found:' . $class);
         $object = new $class($this);
-        // call method
         assertOrExit(method_exists($object, $method), 'method not found:' . $method);
         call_user_func_array(array($object, $method), $params);
         return $object;
+    }
+
+    private function handle($box)
+    {
+        $class = $box[0];
+        $method = $box[1];
+        $params  = $box[2];
+        $app = new LApplication($this);
+        call_user_func_array($this->handler, array($app, $class, $method, $params));
+        return $app;
     }
 
 }

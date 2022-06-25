@@ -15,6 +15,12 @@ class LResponse
         //
     }
 
+    function writeRedirect($path)
+    {
+        assertStringExit($path);
+        redirectAndExit($_SERVER['SCRIPT_NAME'] . "/" . $path);
+    }
+
     function writeHead($content)
     {
         assertStringExit($content);

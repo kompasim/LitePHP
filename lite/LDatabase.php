@@ -20,7 +20,7 @@ class LDatabase
     function connect($meedoInfo)
     {
         assertOrExit($this->medoo == $this, "system error!");
-        $medooPath =  PATH_THIRD . "Medoo.php";
+        $medooPath =  PATH_LITE . "third/Medoo.php";
         assertOrExit(file_exists($medooPath), "invalid medoo!");
         require_once $medooPath;
         $this->medoo = new Medoo\Medoo($meedoInfo);
